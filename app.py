@@ -9,7 +9,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 st.set_page_config(
-    page_title="MPS Anomaly Detection | Indus-2",
+    page_title="MPS Anomaly Detection",
     page_icon="⚡",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -227,7 +227,6 @@ PAGES = [
 
 with st.sidebar:
     st.markdown("## ⚡ MPS Anomaly Detection")
-    st.markdown("**Indus-2 Synchrotron · RRCAT**")
     st.markdown("---")
 
     # Pipeline status
@@ -241,11 +240,6 @@ with st.sidebar:
     st.markdown("---")
     page = st.radio("Navigate", PAGES, label_visibility="collapsed")
     st.markdown("---")
-    st.markdown(
-        '<div class="info-box">BTech Final Year Project<br>'
-        '<small>Deep Autoencoder for MPS Fault Detection</small></div>',
-        unsafe_allow_html=True,
-    )
 
 # ══════════════════════════════════════════════════════════════════════════════
 # PAGE 1 — Overview
