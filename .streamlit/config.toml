@@ -7,9 +7,10 @@ textColor       = "#c9d1d9"
 font            = "sans serif"
 
 [server]
-headless        = true
-enableCORS      = false
+headless             = true
+enableCORS           = true
 enableXsrfProtection = true
+maxUploadSize        = 500
 
 [browser]
 gatherUsageStats = false
