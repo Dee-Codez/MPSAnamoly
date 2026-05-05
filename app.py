@@ -225,11 +225,13 @@ PAGES = [
     "📊 Results Dashboard",
 ]
 
+if "page_idx" not in st.session_state:
+    st.session_state["page_idx"] = 0
+
 with st.sidebar:
     st.markdown("## ⚡ MPS Anomaly Detection")
     st.markdown("---")
 
-    # Pipeline status
     def _dot(ok): return "🟢" if ok else "🔴"
     st.markdown(
         f"{_dot(st.session_state['data_ready'])} Data loaded &nbsp;&nbsp;"
@@ -238,8 +240,41 @@ with st.sidebar:
         unsafe_allow_html=True,
     )
     st.markdown("---")
-    page = st.radio("Navigate", PAGES, label_visibility="collapsed")
+    page = st.radio(
+        "Navigate", PAGES,
+        index=st.session_state["page_idx"],
+        label_visibility="collapsed",
+    )
+    # Keep page_idx in sync when user clicks the sidebar directly
+    st.session_state["page_idx"] = PAGES.index(page)
+
+    # Prev / Next in sidebar
+    _idx = st.session_state["page_idx"]
+    _sb_prev, _sb_next = st.columns(2)
+    if _idx > 0:
+        if _sb_prev.button("← Prev", key="sb_prev", use_container_width=True):
+            st.session_state["page_idx"] = _idx - 1
+            st.rerun()
+    if _idx < len(PAGES) - 1:
+        if _sb_next.button("Next →", key="sb_next", use_container_width=True):
+            st.session_state["page_idx"] = _idx + 1
+            st.rerun()
     st.markdown("---")
+
+
+def _nav_buttons():
+    """Prev / Next buttons rendered at the bottom of every page."""
+    idx = st.session_state["page_idx"]
+    st.markdown("---")
+    left, _, right = st.columns([2, 6, 2])
+    if idx > 0:
+        if left.button(f"← {PAGES[idx - 1]}", use_container_width=True):
+            st.session_state["page_idx"] = idx - 1
+            st.rerun()
+    if idx < len(PAGES) - 1:
+        if right.button(f"{PAGES[idx + 1]} →", use_container_width=True):
+            st.session_state["page_idx"] = idx + 1
+            st.rerun()
 
 # ══════════════════════════════════════════════════════════════════════════════
 # PAGE 1 — Overview
@@ -318,6 +353,7 @@ if page == "🏠 Overview":
             f'<p><strong>{title}</strong><br><small>{desc}</small></p></div>',
             unsafe_allow_html=True,
         )
+    _nav_buttons()
 
 # ══════════════════════════════════════════════════════════════════════════════
 # PAGE 2 — Data Pipeline
@@ -508,6 +544,7 @@ elif page == "📂 Data Pipeline":
             fig2.update_layout(paper_bgcolor="#0e1117", plot_bgcolor="#161b22",
                                font_color="#c9d1d9")
             st.plotly_chart(fig2, use_container_width=True)
+    _nav_buttons()
 
 # ══════════════════════════════════════════════════════════════════════════════
 # PAGE 3 — Beam Analysis
@@ -643,6 +680,7 @@ elif page == "📡 Beam Analysis":
             st.plotly_chart(fig3, use_container_width=True)
         else:
             st.info("No cycles available.")
+    _nav_buttons()
 
 # ══════════════════════════════════════════════════════════════════════════════
 # PAGE 4 — Model Training
@@ -930,6 +968,8 @@ elif page == "🧠 Model Training":
                     mime="application/octet-stream",
                 )
 
+    _nav_buttons()
+
 # ══════════════════════════════════════════════════════════════════════════════
 # PAGE 5 — Anomaly Detection
 # ══════════════════════════════════════════════════════════════════════════════
@@ -1051,6 +1091,8 @@ elif page == "🔍 Anomaly Detection":
                 st.info("No anomalies detected at current threshold.")
         else:
             st.info("Set the slider then click **▶️  Run Supply Fault Analysis** to compute.")
+
+    _nav_buttons()
 
 # ══════════════════════════════════════════════════════════════════════════════
 # PAGE 6 — Results Dashboard
@@ -1176,3 +1218,5 @@ elif page == "📊 Results Dashboard":
             "Anomalies Detected": f"{int(predictions.sum()):,}",
             "Anomaly Rate":       f"{100*predictions.mean():.2f}%",
         }, orient="index", columns=["Value"]))
+
+    _nav_buttons()
