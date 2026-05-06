@@ -277,83 +277,283 @@ def _nav_buttons():
             st.rerun()
 
 # ══════════════════════════════════════════════════════════════════════════════
-# PAGE 1 — Overview
+# PAGE 1 — Overview (Landing)
 # ══════════════════════════════════════════════════════════════════════════════
 if page == "🏠 Overview":
-    st.markdown("# Deep Autoencoder-Based Anomaly Detection")
-    st.markdown("### Magnet Power Supply Systems · Indus-2 Synchrotron")
-    st.markdown("---")
+    st.markdown("""
+    <style>
+    /* ── Hero banner ── */
+    .hero-wrap {
+        background: linear-gradient(135deg, #0d1117 0%, #0e2a45 45%, #0d1117 100%);
+        border: 1px solid #21262d;
+        border-radius: 16px;
+        padding: 64px 48px 52px;
+        margin-bottom: 32px;
+        position: relative;
+        overflow: hidden;
+    }
+    .hero-wrap::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+            repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 80px,
+                rgba(88,166,255,0.03) 80px,
+                rgba(88,166,255,0.03) 81px
+            ),
+            repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 80px,
+                rgba(88,166,255,0.03) 80px,
+                rgba(88,166,255,0.03) 81px
+            );
+        pointer-events: none;
+    }
+    .hero-tag {
+        display: inline-block;
+        background: rgba(88,166,255,0.12);
+        border: 1px solid rgba(88,166,255,0.35);
+        color: #58a6ff;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 4px 14px;
+        border-radius: 100px;
+        margin-bottom: 22px;
+    }
+    .hero-title {
+        font-size: clamp(28px, 4vw, 48px);
+        font-weight: 800;
+        line-height: 1.15;
+        color: #e6edf3;
+        margin: 0 0 10px;
+    }
+    .hero-title span {
+        background: linear-gradient(90deg, #58a6ff 0%, #79c0ff 60%, #a5d6ff 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    .hero-sub {
+        font-size: 16px;
+        color: #8b949e;
+        margin: 0 0 36px;
+        max-width: 560px;
+        line-height: 1.6;
+    }
+    .hero-badges {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    .hero-badge {
+        background: rgba(33,38,45,0.8);
+        border: 1px solid #30363d;
+        color: #c9d1d9;
+        font-size: 12px;
+        padding: 5px 14px;
+        border-radius: 8px;
+    }
+    /* ── Stat strip ── */
+    .stat-strip {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 32px;
+    }
+    .stat-card {
+        background: #161b22;
+        border: 1px solid #21262d;
+        border-radius: 12px;
+        padding: 22px 20px;
+        text-align: center;
+        transition: border-color 0.2s;
+    }
+    .stat-card:hover { border-color: #58a6ff; }
+    .stat-num {
+        font-size: 32px;
+        font-weight: 800;
+        color: #58a6ff;
+        line-height: 1;
+        margin-bottom: 6px;
+    }
+    .stat-lbl {
+        font-size: 12px;
+        color: #8b949e;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    /* ── Feature grid ── */
+    .feat-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-bottom: 32px;
+    }
+    .feat-card {
+        background: #161b22;
+        border: 1px solid #21262d;
+        border-radius: 12px;
+        padding: 24px 20px;
+        transition: border-color 0.2s, transform 0.15s;
+    }
+    .feat-card:hover { border-color: #388bfd; transform: translateY(-2px); }
+    .feat-icon { font-size: 26px; margin-bottom: 10px; }
+    .feat-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: #e6edf3;
+        margin-bottom: 6px;
+    }
+    .feat-desc { font-size: 13px; color: #8b949e; line-height: 1.55; }
+    /* ── Arch row ── */
+    .arch-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+        background: #161b22;
+        border: 1px solid #21262d;
+        border-radius: 12px;
+        padding: 28px 24px;
+        margin-bottom: 32px;
+        overflow-x: auto;
+    }
+    .arch-node {
+        background: #0e1117;
+        border: 2px solid #30363d;
+        border-radius: 10px;
+        padding: 10px 16px;
+        text-align: center;
+        min-width: 80px;
+        flex-shrink: 0;
+    }
+    .arch-node.enc  { border-color: #2ea043; }
+    .arch-node.lat  { border-color: #f0883e; }
+    .arch-node.dec  { border-color: #2ea043; }
+    .arch-node.io   { border-color: #388bfd; }
+    .arch-label { font-size: 11px; font-weight: 700; color: #c9d1d9; }
+    .arch-dim   { font-size: 10px; color: #8b949e; margin-top: 2px; }
+    .arch-arrow {
+        color: #30363d;
+        font-size: 18px;
+        padding: 0 4px;
+        flex-shrink: 0;
+    }
+    /* ── CTA ── */
+    .cta-row {
+        background: linear-gradient(135deg, #0e2a45 0%, #0d1117 100%);
+        border: 1px solid rgba(88,166,255,0.25);
+        border-radius: 12px;
+        padding: 32px 36px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        flex-wrap: wrap;
+        margin-bottom: 8px;
+    }
+    .cta-text h3 { color: #e6edf3; font-size: 18px; margin: 0 0 6px; }
+    .cta-text p  { color: #8b949e; font-size: 14px; margin: 0; }
+    </style>
+    """, unsafe_allow_html=True)
 
-    c1, c2, c3, c4 = st.columns(4)
-    for col, (val, lbl) in zip(
-        [c1, c2, c3, c4],
-        [("95.2%","Accuracy"),("93.8%","Precision"),("94.6%","Recall"),("94.2%","F1-Score")]
-    ):
-        col.markdown(
-            f'<div class="metric-card"><h2>{val}</h2><p>{lbl}</p></div>',
-            unsafe_allow_html=True,
-        )
+    # ── Hero ──────────────────────────────────────────────────────────────────
+    st.markdown("""
+    <div class="hero-wrap">
+        <div class="hero-tag">Maintainers : Gauri Chapra · Debam Pati</div>
+        <h1 class="hero-title">
+            Deep Autoencoder‑Based<br>
+            <span>Anomaly Detection</span>
+        </h1>
+        <p class="hero-sub">
+            Real-time fault detection across 117 Magnet Power Supply units of the
+            Indus-2 synchrotron using unsupervised deep learning — no labelled
+            fault data required.
+        </p>
+        <div class="hero-badges">
+            <span class="hero-badge">Indus-2 Synchrotron</span>
+            <span class="hero-badge">117 MPS Units</span>
+            <span class="hero-badge">Deep Autoencoder</span>
+            <span class="hero-badge">TensorFlow · Streamlit</span>
+            <span class="hero-badge">RRCAT Indore</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
-    st.markdown("---")
-    left, right = st.columns([1.4, 1])
+    # ── Feature grid ──────────────────────────────────────────────────────────
+    st.markdown("""
+    <div class="feat-grid">
+        <div class="feat-card">
+            <div class="feat-icon">📡</div>
+            <div class="feat-title">Signal Ingestion</div>
+            <div class="feat-desc">Ingest raw vmeset &amp; readback streams for all 117 supplies. Upload real CSVs or generate a reproducible synthetic Indus-2 dataset instantly.</div>
+        </div>
+        <div class="feat-card">
+            <div class="feat-icon">⚡</div>
+            <div class="feat-title">Beam Cycle Analysis</div>
+            <div class="feat-desc">State machine scans the event log for Ramp End → Kill pairs and classifies every timestamp as No Loss, Partial Loss, or Complete Loss.</div>
+        </div>
+        <div class="feat-card">
+            <div class="feat-icon">🧠</div>
+            <div class="feat-title">Autoencoder Training</div>
+            <div class="feat-desc">Train a symmetric 118→16→117 autoencoder epoch-by-epoch with a live progress bar, or load pre-trained weights from Google Colab.</div>
+        </div>
+        <div class="feat-card">
+            <div class="feat-icon">🔍</div>
+            <div class="feat-title">Anomaly Detection</div>
+            <div class="feat-desc">Threshold t_mps = μ + 2σ flags timestamps where reconstruction error exceeds learned normal behaviour. Per-supply fault ranking included.</div>
+        </div>
+        <div class="feat-card">
+            <div class="feat-icon">📊</div>
+            <div class="feat-title">Results Dashboard</div>
+            <div class="feat-desc">Confusion matrix, correlation heatmap, per-supply error heatmap, and one-click CSV / Parquet export of all anomaly results.</div>
+        </div>
+        <div class="feat-card">
+            <div class="feat-icon">☁️</div>
+            <div class="feat-title">Colab GPU Training</div>
+            <div class="feat-desc">Included Colab notebook trains on a T4 GPU in minutes. Download weights.h5 and reload here — zero version-mismatch risk.</div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
-    with left:
-        st.markdown('<h3 class="section-header">Pipeline</h3>', unsafe_allow_html=True)
-        steps = [
-            ("Data Ingestion",        "Raw events + MPS readback/vmeset signals"),
-            ("Beam Cycle Extraction", "State machine: Ramp End → Beam Kill"),
-            ("Deviation Engineering", "deviation = readback − vmeset per supply"),
-            ("Autoencoder Training",  "118→64→32→16→32→64→117 · MAE · Adam"),
-            ("Anomaly Detection",     "Threshold = μ + 2σ reconstruction error"),
-            ("Fault Classification",  "NL / PL / CL + single/multi-supply patterns"),
-        ]
-        for i, (title, desc) in enumerate(steps, 1):
-            st.markdown(
-                f'<div class="info-box">'
-                f'<span class="step-badge">{i}</span>'
-                f'<strong style="color:#58a6ff">{title}</strong><br>'
-                f'<small style="color:#8b949e;margin-left:36px">{desc}</small></div>',
-                unsafe_allow_html=True,
-            )
+    # ── Architecture strip ────────────────────────────────────────────────────
+    st.markdown("""
+    <div class="arch-row">
+        <div class="arch-node io"><div class="arch-label">Input</div><div class="arch-dim">118</div></div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node enc"><div class="arch-label">Encoder</div><div class="arch-dim">64</div></div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node enc"><div class="arch-label">Encoder</div><div class="arch-dim">32</div></div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node lat"><div class="arch-label">Latent</div><div class="arch-dim">16</div></div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node dec"><div class="arch-label">Decoder</div><div class="arch-dim">32</div></div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node dec"><div class="arch-label">Decoder</div><div class="arch-dim">64</div></div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node io"><div class="arch-label">Output</div><div class="arch-dim">117</div></div>
+    </div>
+    """, unsafe_allow_html=True)
 
-    with right:
-        st.markdown('<h3 class="section-header">Autoencoder Topology</h3>', unsafe_allow_html=True)
-        layers = ["Input (118)", "Encoder 64", "Encoder 32",
-                  "Latent 16",   "Decoder 32", "Decoder 64", "Output (117)"]
-        colors = ["#388bfd","#2ea043","#2ea043","#f0883e","#2ea043","#2ea043","#388bfd"]
-        fig = go.Figure()
-        for i, (lbl, clr) in enumerate(zip(layers, colors)):
-            fig.add_trace(go.Scatter(
-                x=[0], y=[len(layers) - i],
-                mode="markers+text",
-                marker=dict(size=52, color=clr, opacity=0.85),
-                text=[lbl], textposition="middle center",
-                textfont=dict(color="white", size=11),
-                showlegend=False,
-            ))
-        fig.update_layout(
-            paper_bgcolor="#0e1117", plot_bgcolor="#0e1117",
-            xaxis=dict(visible=False, range=[-0.5, 0.5]),
-            yaxis=dict(visible=False),
-            height=440, margin=dict(l=0, r=0, t=10, b=10),
-        )
-        st.plotly_chart(fig, use_container_width=True)
+    # ── CTA ───────────────────────────────────────────────────────────────────
+    st.markdown("""
+    <div class="cta-row">
+        <div class="cta-text">
+            <h3>Ready to run the pipeline?</h3>
+            <p>Start by uploading your MPS data or generating a synthetic Indus-2 dataset.</p>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
-    st.markdown("---")
-    st.markdown('<h3 class="section-header">MPS Fault Categories</h3>', unsafe_allow_html=True)
-    for col, (icon, title, desc) in zip(
-        st.columns(4),
-        [("🔴","Single-Supply Single","Isolated one-time fault"),
-         ("🟠","Single-Supply Repeated","Same unit faults repeatedly"),
-         ("🟡","Multi-Supply Single","Correlated one-time burst"),
-         ("🔵","Multi-Supply Repeated","Systemic multi-unit fault")]
-    ):
-        col.markdown(
-            f'<div class="metric-card"><h2>{icon}</h2>'
-            f'<p><strong>{title}</strong><br><small>{desc}</small></p></div>',
-            unsafe_allow_html=True,
-        )
-    _nav_buttons()
+    if st.button("📂  Go to Data Pipeline →", type="primary", use_container_width=True):
+        st.session_state["page_idx"] = 1
+        st.rerun()
 
 # ══════════════════════════════════════════════════════════════════════════════
 # PAGE 2 — Data Pipeline
