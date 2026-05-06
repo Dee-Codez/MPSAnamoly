@@ -232,11 +232,30 @@ with st.sidebar:
     st.markdown("## ⚡ MPS Anomaly Detection")
     st.markdown("---")
 
-    def _dot(ok): return "🟢" if ok else "🔴"
+    _d = st.session_state["data_ready"]
+    _b = st.session_state["beam_ready"]
+    _m = st.session_state["model_ready"]
+
+    def _status_row(label, done):
+        color  = "#2ea043" if done else "#30363d"
+        dot_bg = "#2ea043" if done else "#21262d"
+        dot    = "✓"       if done else "·"
+        txt    = "#c9d1d9" if done else "#6e7681"
+        return (
+            f'<div style="display:flex;align-items:center;gap:10px;'
+            f'padding:8px 10px;border-radius:8px;margin-bottom:5px;'
+            f'background:#161b22;border:1px solid {color}22;">'
+            f'<span style="width:20px;height:20px;border-radius:50%;background:{dot_bg};'
+            f'display:flex;align-items:center;justify-content:center;'
+            f'font-size:11px;font-weight:700;color:white;flex-shrink:0;">{dot}</span>'
+            f'<span style="font-size:13px;color:{txt};font-weight:{"600" if done else "400"};">{label}</span>'
+            f'</div>'
+        )
+
     st.markdown(
-        f"{_dot(st.session_state['data_ready'])} Data loaded &nbsp;&nbsp;"
-        f"{_dot(st.session_state['beam_ready'])} Beam analysed &nbsp;&nbsp;"
-        f"{_dot(st.session_state['model_ready'])} Model trained",
+        _status_row("Data loaded",    _d) +
+        _status_row("Beam analysed",  _b) +
+        _status_row("Model trained",  _m),
         unsafe_allow_html=True,
     )
     st.markdown("---")
